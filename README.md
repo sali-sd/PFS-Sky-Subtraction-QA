@@ -36,5 +36,10 @@ Edit the `repo`, `collections`, and `cpu_cores` values in the `__main__` block o
 python skysubQA.py
 ```
 
+It can also be run interactively in a Jupyter notebook — for example on the
+**Hilo**, **Mitaka**, or **Science Platform** servers where the PFS DRP stack and
+data store are available. Paste the script (or import its functions) into a
+notebook cell and run it there.
+
 By default every `pfsMerged` visit in the collection is processed; edit the `visits`
 line to restrict the set.
