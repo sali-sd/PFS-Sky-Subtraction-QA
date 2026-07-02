@@ -1,0 +1,18 @@
+# Generated QA outputs from skysubQA.py
+PFS_SkySubQA_*.csv
+PFS_SkySubQA_*.pdf
+SkySubQA_Log_*.txt
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+venv/
+env/
