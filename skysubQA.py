@@ -209,8 +209,11 @@ def skysub_all(visit, collections, repo):
                                      arm_cfg['wavl_end'], arm_cfg['box'])
                 fib_skyline[arm] = float(top10['Fluxtosky'].median()) if len(top10) > 0 else np.nan
 
-                fib_contflux[arm] = float(np.nanmedian(cFlux[mask_arm]))
-                fib_contsky[arm]  = float(np.nanmedian(cSky[mask_arm]))
+                # Exclude bad/zero-norm pixels from the continuum median, matching the
+                # masking used in the sky-line scan and the median-spectra merge.
+                cont_mask = mask_arm & ~effectively_bad
+                fib_contflux[arm] = float(np.nanmedian(cFlux[cont_mask]))
+                fib_contsky[arm]  = float(np.nanmedian(cSky[cont_mask]))
 
             kept_fiberid.append(fid)
             kept_spectrograph.append(spec)
