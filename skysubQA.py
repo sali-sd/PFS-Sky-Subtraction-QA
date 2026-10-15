@@ -14,6 +14,15 @@ from pfs.drp.stella import SpectrumSet
 import warnings
 warnings.filterwarnings("ignore", message="This figure includes Axes that are not compatible with tight_layout")
 
+
+def _save_raster(pdf, dpi=300):
+    """Rasterize the current figure at 300 dpi so the PDF scrolls quickly."""
+    fig = plt.gcf()
+    for ax in fig.axes:
+        ax.set_rasterized(True)
+    pdf.savefig(bbox_inches="tight", dpi=dpi)
+
+
 # ==== SKY SUBTRACTION QA — UNIFIED ALL ARMS ====
 class _Tee:
     """Mirror stdout and stderr to both the console and a log file."""
@@ -463,7 +472,7 @@ def plot_skysub(skyline_file, collections, collections_safe, visits_order):
             ax.grid(axis='y', linestyle='--', alpha=0.4)
             ax.minorticks_on()
             fig.tight_layout()
-            pdf.savefig(bbox_inches="tight", dpi=200)
+            _save_raster(pdf)
             plt.close()
 
         # --- Line plots: 3 arm median lines overlaid with ±1σ bands ---
@@ -494,7 +503,7 @@ def plot_skysub(skyline_file, collections, collections_safe, visits_order):
             ax.legend(handles=handles, loc='upper left', fancybox=True, framealpha=0.5)
             ax.grid(True, alpha=0.4)
             fig.tight_layout()
-            pdf.savefig(bbox_inches="tight", dpi=200)
+            _save_raster(pdf)
             plt.close()
 
         # --- Per-visit histograms: 3 arms overlaid, dynamic x-limits ---
@@ -529,7 +538,7 @@ def plot_skysub(skyline_file, collections, collections_safe, visits_order):
             ax.grid(True, alpha=0.4)
             ax.minorticks_on()
             fig.tight_layout()
-            pdf.savefig(bbox_inches="tight", dpi=200)
+            _save_raster(pdf)
             plt.close()
 
     visits_no_data = [v for v in visits_order if v not in valid_visits]
@@ -689,7 +698,7 @@ def plot_continuum_plots(continuum_file, collections, collections_safe, visits_o
             ax.grid(axis='y', linestyle='--', alpha=0.4)
             ax.minorticks_on()
             fig.tight_layout()
-            pdf.savefig(bbox_inches="tight", dpi=200)
+            _save_raster(pdf)
             plt.close()
 
         # ---- Flux continuum line plots (3 arm lines overlaid) ----
@@ -720,7 +729,7 @@ def plot_continuum_plots(continuum_file, collections, collections_safe, visits_o
             ax.legend(handles=handles, loc='upper left', fancybox=True, framealpha=0.5)
             ax.grid(True, alpha=0.4)
             fig.tight_layout()
-            pdf.savefig(bbox_inches="tight", dpi=200)
+            _save_raster(pdf)
             plt.close()
 
         # ---- Flux/Sky ratio box plots (3 arms side by side) ----
@@ -758,7 +767,7 @@ def plot_continuum_plots(continuum_file, collections, collections_safe, visits_o
             ax.grid(axis='y', linestyle='--', alpha=0.4)
             ax.minorticks_on()
             fig.tight_layout()
-            pdf.savefig(bbox_inches="tight", dpi=200)
+            _save_raster(pdf)
             plt.close()
 
         # ---- Flux/Sky ratio line plots (3 arm lines overlaid) ----
@@ -789,7 +798,7 @@ def plot_continuum_plots(continuum_file, collections, collections_safe, visits_o
             ax.legend(handles=handles, loc='upper left', fancybox=True, framealpha=0.5)
             ax.grid(True, alpha=0.4)
             fig.tight_layout()
-            pdf.savefig(bbox_inches="tight", dpi=200)
+            _save_raster(pdf)
             plt.close()
 
     visits_no_data = [v for v in visits_order if v not in valid_visits]
@@ -970,7 +979,7 @@ def _plot_median_spectra(visit_list, collections, df_skyline, repo, pdf, label, 
                 ax_a.grid(True, alpha=0.3)
 
             fig.tight_layout()
-            pdf.savefig(bbox_inches='tight', dpi=150)
+            _save_raster(pdf)
             plt.close()
             gc.collect()
 
@@ -1047,7 +1056,7 @@ def plot_pfs_merged_spectra(collections, collections_safe, visits_order, skyline
         ax.axis('off')
         ax.text(0.5, 0.55, title, transform=ax.transAxes,
                 fontsize=28, fontweight='bold', ha='center', va='center', color=color)
-        pdf.savefig(bbox_inches='tight', dpi=200)
+        _save_raster(pdf)
         plt.close()
 
     with PdfPages(pdf_name) as pdf:
@@ -1073,8 +1082,13 @@ def plot_pfs_merged_spectra(collections, collections_safe, visits_order, skyline
 
 # ==== EXECUTION ====
 if __name__ == "__main__":
-    repo        = "/work/datastore"
-    collections = "PFS/calib/pipe2d-1842/run28/verifyCalib.science.20260520a"
+    # repo        = "/lfs_pfs/Subaru/PFS/data/datastore_20260206"
+    # collections = "PFS/science/S25A/coadd.20260206"
+    
+    repo        = "/lfs_pfs/Subaru/PFS/data/datastore_20260226"
+    # collections = "PFS/science/run26/coadd.20260430"
+    # collections = "PFS/science/run28/coadd.20260707/brn"
+    collections = "PFS/science/S25/coadd.20260804"
 
     cpu_cores = 50
 
